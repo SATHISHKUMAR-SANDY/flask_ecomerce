@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Welcome to FlaskShop{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+  <h1>Welcome to FlaskShop</h1>
+  <p class="lead">Your one-stop online store for all your needs.</p>
+  {% if current_user.is_authenticated %}
+    <p>Hello, {{ current_user.username }}! Browse our products below.</p>
+  {% else %}
+    <p><a href="{{ url_for('auth.login') }}">Login</a> or <a href="{{ url_for('auth.register') }}">Register</a> to get started.</p>
+  {% endif %}
+</div>
+
+<h2 class="mb-4">Featured Products</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for product in products %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
+          <p class="card-text"><strong>${{ '%.2f'|format(product.price) }}</strong></p>
+          <a href="{{ url_for('product.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <p>No products available at the moment.</p>
+  {% endfor %}
+</div>
+{% endblock %}

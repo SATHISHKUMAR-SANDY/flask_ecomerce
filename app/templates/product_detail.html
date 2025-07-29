@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - FlaskShop{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <h4>Price: ${{ '%.2f' | format(product.price) }}</h4>
+    <h5>Available Quantity: {{ product.quantity }}</h5>
+
+    {% if current_user.is_authenticated %}
+    <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" max="{{ product.quantity }}">
+      </div>
+      <button type="submit" class="btn btn-success">Add to Cart</button>
+    </form>
+    {% else %}
+      <p><a href="{{ url_for('auth.login') }}">Login</a> to add items to your cart.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
